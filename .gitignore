@@ -362,3 +362,6 @@ MigrationBackup/
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
 /appsettings.json
+/Migrations/20260313182926_CentralDocsWeb.cs
+/Migrations/CentralDocsContextModelSnapshot.cs
+/Migrations/20260313182926_CentralDocsWeb.Designer.cs
