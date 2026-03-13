@@ -75,6 +75,37 @@ namespace ApiCentralDocsWeb.Controllers
 
             return BadRequest("Erro ao criar usuário");
         }
+
+        [HttpPut("AtualizarUsuario/{id}")]
+        public async Task<IActionResult> AtualizarUsuario([FromRoute] int id, [FromBody] AtualizarUsuarioDTO dadosUsuario)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var usuario = await _context.Usuarios.FindAsync(id);
+            if (usuario == null)
+            {
+                return BadRequest(new
+                {
+                    Erro = true,
+                    Mensagem = $"Usuário com id {id} não encontrado"
+                });
+            }
+            usuario.Nome = dadosUsuario.Nome;
+            usuario.Email = dadosUsuario.Email;
+            usuario.Senha = dadosUsuario.Senha;
+            _context.Usuarios.Update(usuario);
+            int resultado = await _context.SaveChangesAsync();
+            if (resultado > 0)
+                return Ok(new
+                {
+                    Mensagem = $"Usuário com id {id} foi atualizado com sucesso",
+                    UsuarioAtualizado = usuario
+                });
+            return BadRequest("Erro ao atualizar usuário");
+        }
+
         [HttpDelete("DeletarUsuario/{id}")]
         public async Task<IActionResult> DeletarUsuario([FromRoute] int id)
         {
