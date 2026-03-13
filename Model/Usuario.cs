@@ -7,19 +7,26 @@ namespace ApiCentralDocsWeb.Model
         [Key]
         public int Id { get; set; }
 
-        [Required (ErrorMessage = "Nome é um campo obrigatório")]
+        [Required(ErrorMessage = "Nome é um campo obrigatório")]
         public string Nome { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "CPF é um campo obrigatório")]
-        [StringLength(11, ErrorMessage = "CPF deve conter exatamente 11 caracteres")]
+        [RegularExpression(@"^\d{11}$", ErrorMessage = "CPF deve conter exatamente 11 números")]
         public string CPF { get; set; } = string.Empty;
 
-        [Required (ErrorMessage = "Email é um campo obrigatório")]
+        [Required(ErrorMessage = "Email é um campo obrigatório")]
+        [EmailAddress(ErrorMessage = "Email inválido")]
         public string Email { get; set; } = string.Empty;
-        [Required (ErrorMessage = "Senha é um campo obrigatório")]
+
+        [Required(ErrorMessage = "Senha é um campo obrigatório")]
         public string Senha { get; set; } = string.Empty;
+
         public DateTime DataCriacao { get; set; }
+
         public bool Ativo { get; set; }
+
+        // relacionamento
+        public List<Documento> Documentos { get; set; } = new();
 
         public Usuario()
         {
