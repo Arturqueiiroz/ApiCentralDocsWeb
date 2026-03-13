@@ -7,6 +7,7 @@ namespace ApiCentralDocsWeb.Data
     {
         public CentralDocsContext(DbContextOptions<CentralDocsContext> options) : base(options)
         {
+
         }
         public DbSet<Usuario> Usuarios { get; set; }
     }

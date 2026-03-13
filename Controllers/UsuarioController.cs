@@ -30,6 +30,7 @@ namespace ApiCentralDocsWeb.Controllers
             var usuario = await _context.Usuarios.FindAsync(id);
 
             if (usuario == null)
+
             {
                 return BadRequest(new
                 {

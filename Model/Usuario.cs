@@ -23,6 +23,7 @@ namespace ApiCentralDocsWeb.Model
 
         public DateTime DataCriacao { get; set; }
 
+
         public bool Ativo { get; set; }
 
         // relacionamento
