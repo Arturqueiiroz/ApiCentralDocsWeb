@@ -20,7 +20,7 @@ namespace ApiCentralDocsWeb.Controllers
         [HttpGet("GetAll")]
         public async Task<IActionResult> GetAllUsuarios()
         {
-            var usuarios = await _context.Usuarios.ToListAsync();
+            var usuarios = await _context.Usuarios.Include(usuario => usuario.Documentos).ToListAsync();
             return Ok(usuarios);
         }
 

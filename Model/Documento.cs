@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace ApiCentralDocsWeb.Model
 {
@@ -21,6 +22,9 @@ namespace ApiCentralDocsWeb.Model
         // relacionamento com Usuario
         [ForeignKey("Usuario")]
         public int UsuarioId { get; set; }
+
+
+        [JsonIgnore]
 
         public Usuario? Usuario { get; set; }
 
