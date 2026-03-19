@@ -9,7 +9,6 @@ namespace ApiCentralDocsWeb.Model
 
         [Required(ErrorMessage = "Nome do tipo de documento é obrigatório")]
         public string Nome { get; set; } = string.Empty;
-
         public List<Documento> Documentos { get; set; } = new();
     }
 }

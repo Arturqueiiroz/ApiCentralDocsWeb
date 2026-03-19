@@ -10,9 +10,9 @@ namespace ApiCentralDocsWeb.Controllers
     [Route("api/[controller]")]
     public class UsuarioController : ControllerBase
     {
-        private readonly CentralDocsContext _context;
+        private readonly AppDbContext _context;
 
-        public UsuarioController(CentralDocsContext context)
+        public UsuarioController(AppDbContext context)
         {
             _context = context;
         }
