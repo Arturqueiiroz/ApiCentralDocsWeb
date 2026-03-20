@@ -132,5 +132,44 @@ namespace ApiCentralDocsWeb.Controllers
 
             return BadRequest("Erro ao deletar usuário");
         }
+        [HttpPost("login")]
+        public async Task<IActionResult> Login([FromBody] LoginDTO dados)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var usuario = await _context.Usuarios
+                .Include(ussuario => ussuario.Documentos)
+                    .ThenInclude(ddocumento => ddocumento.TipoDocumento)
+                .FirstOrDefaultAsync(ussuario => ussuario.Email == dados.Email && ussuario.Senha == dados.Senha);
+
+            if (usuario == null)
+            {
+                return Unauthorized(new
+                {
+                    Erro = true,
+                    Mensagem = "Email ou senha inválidos"
+                });
+            }
+
+            return Ok(new
+            {
+                Mensagem = "Login realizado com sucesso",
+                Usuario = new
+                {
+                    usuario.Id,
+                    usuario.Nome,
+                    usuario.Email,
+                    Documentos = usuario.Documentos.Select(documentos => new
+                    {
+                        documentos.Id,
+                        documentos.Numero,
+                        documentos.OrgaoEmissor,
+                        documentos.CidadeEmissao,
+                        Tipo = documentos.TipoDocumento.Nome
+                    })
+                }
+            });
+        }
     }
 }
