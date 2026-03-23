@@ -8,10 +8,12 @@ namespace ApiCentralDocsWeb.Services
     public class UsuarioService
     {
         private readonly AppDbContext _context;
+        private readonly TokenService _TokenService;
 
-        public UsuarioService(AppDbContext context)
+        public UsuarioService(AppDbContext context, TokenService tokenService)
         {
             _context = context;
+            _TokenService = tokenService;
         }
 
         public async Task<List<Usuario>> GetAllUsuarios()
@@ -105,10 +107,11 @@ namespace ApiCentralDocsWeb.Services
             {
                 return new { Erro = true, Mensagem = "Email ou senha inválidos" };
             }
-
+            var token = _TokenService.GerarToken(usuario);
             return new
             {
                 Erro = false,
+                Token = token,
                 Usuario = new
                 {
                     usuario.Id,
