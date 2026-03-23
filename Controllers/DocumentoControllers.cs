@@ -3,12 +3,14 @@ using Microsoft.EntityFrameworkCore;
 using ApiCentralDocsWeb.Data;
 using ApiCentralDocsWeb.Model;
 using ApiCentralDocsWeb.Model.DTO;
+using Microsoft.AspNetCore.Authorization;
 
 
 namespace ApiCentralDocsWeb.Controllers
 {
-    [ApiController]
+    [Authorize]
     [Route("api/[controller]")]
+    [ApiController]
     public class DocumentoController : ControllerBase
     {
         private readonly AppDbContext _context;
