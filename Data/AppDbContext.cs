@@ -11,5 +11,6 @@ namespace ApiCentralDocsWeb.Data
         public DbSet<Usuario> Usuarios { get; set; }
         public DbSet<Documento> Documentos { get; set; }
         public DbSet<TipoDocumento> TiposDocumento { get; set; }
+        public DbSet<Foto> Fotos { get; set; }
     }
 }
