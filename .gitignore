@@ -376,3 +376,5 @@ FodyWeavers.xsd
 /Migrations/20260324180817_AddFoto.cs
 >>>>>>> 52c06bb5ae3bcb7396ca220c5a6a891246d98f04
 /Migrations/20260324180817_AddFoto.Designer.cs
+/Migrations/20260324193203_addFoto.cs
+/Migrations/20260324193203_addFoto.Designer.cs
