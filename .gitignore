@@ -368,3 +368,4 @@ FodyWeavers.xsd
 /Migrations/20260319165349_InitialCreate.cs
 /Migrations/AppDbContextModelSnapshot.cs
 /Migrations/20260319165349_InitialCreate.Designer.cs
+/Migrations/20260324180817_AddFoto.cs

@@ -33,5 +33,7 @@ namespace ApiCentralDocsWeb.Model
         public int TipoDocumentoId { get; set; }
 
         public TipoDocumento? TipoDocumento { get; set; }
+
+        public List<Foto> Fotos { get; set; } = new();
     }
 }
