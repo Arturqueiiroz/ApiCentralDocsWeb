@@ -16,6 +16,7 @@ namespace ApiCentralDocsWeb
             // Add services to the container.
 
             builder.Services.AddScoped<UsuarioService>();
+            builder.Services.AddScoped<FotoService>();
             builder.Services.AddScoped<TokenService>();
             builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(option =>
             {
