@@ -45,6 +45,14 @@ namespace ApiCentralDocsWeb.Services
 
         public async Task<dynamic> CriarUsuario(CriarUsuarioDTO dados)
         {
+            if (dados.Senha != dados.ConfirmarSenha)
+            {
+                return new
+                {
+                    Erro = true,
+                    Mensagem = "As senhas não coincidem"
+                };
+            }
             var usuarioExistente = await _context.Usuarios
                 .FirstOrDefaultAsync(u => u.CPF == dados.CPF);
 
