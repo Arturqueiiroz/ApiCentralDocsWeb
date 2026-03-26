@@ -1,4 +1,5 @@
 using ApiCentralDocsWeb.Data;
+using ApiCentralDocsWeb.Interfaces;
 using ApiCentralDocsWeb.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -17,7 +18,7 @@ namespace ApiCentralDocsWeb
 
             builder.Services.AddScoped<UsuarioService>();
             builder.Services.AddScoped<FotoService>();
-            builder.Services.AddScoped<TokenService>();
+            builder.Services.AddScoped<ITokenService ,TokenService>();
             builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(option =>
             {
                 option.TokenValidationParameters = new TokenValidationParameters
@@ -39,9 +40,18 @@ namespace ApiCentralDocsWeb
             builder.Services.AddControllers();
             // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
             builder.Services.AddOpenApi();
-
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("PermitirTudo",
+                    policy =>
+                    {
+                        policy.AllowAnyOrigin()
+                              .AllowAnyHeader()
+                              .AllowAnyMethod();
+                    });
+            });
             var app = builder.Build();
-
+            app.UseCors("PermitirTudo");
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {

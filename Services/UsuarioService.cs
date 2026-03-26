@@ -1,4 +1,5 @@
 ﻿using ApiCentralDocsWeb.Data;
+using ApiCentralDocsWeb.Interfaces;
 using ApiCentralDocsWeb.Model;
 using ApiCentralDocsWeb.Model.DTO;
 using Microsoft.EntityFrameworkCore;
@@ -8,12 +9,12 @@ namespace ApiCentralDocsWeb.Services
     public class UsuarioService
     {
         private readonly AppDbContext _context;
-        private readonly TokenService _TokenService;
+        private readonly ITokenService _tokenService;
 
-        public UsuarioService(AppDbContext context, TokenService tokenService)
+        public UsuarioService(AppDbContext context, ITokenService tokenService)
         {
             _context = context;
-            _TokenService = tokenService;
+            _tokenService = tokenService;
         }
 
         public async Task<List<Usuario>> GetAllUsuarios()
@@ -127,7 +128,7 @@ namespace ApiCentralDocsWeb.Services
                 return new { Erro = true, Mensagem = "Email ou senha inválidos" };
             }
 
-            var token = _TokenService.GerarToken(usuario);
+            var token = _tokenService.GerarToken(usuario);
             return new
             {
                 Erro = false,

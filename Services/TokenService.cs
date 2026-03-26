@@ -1,4 +1,5 @@
-﻿using ApiCentralDocsWeb.Model;
+﻿using ApiCentralDocsWeb.Interfaces;
+using ApiCentralDocsWeb.Model;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -6,7 +7,8 @@ using System.Text;
 
 namespace ApiCentralDocsWeb.Services
 {
-    public class TokenService
+    // A classe TokenService é responsável por gerar tokens JWT para autenticação. Ela implementa a interface ITokenService, garantindo que a implementação possa ser facilmente substituída ou mockada em testes.
+    public class TokenService : ITokenService
     {
         private readonly IConfiguration _configuration;
 
