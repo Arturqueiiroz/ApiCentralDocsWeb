@@ -45,6 +45,14 @@ namespace ApiCentralDocsWeb.Services
 
         public async Task<dynamic> CriarUsuario(CriarUsuarioDTO dados)
         {
+            if (dados.Senha != dados.ConfirmarSenha)
+            {
+                return new
+                {
+                    Erro = true,
+                    Mensagem = "As senhas não coincidem"
+                };
+            }
             var usuarioExistente = await _context.Usuarios
                 .FirstOrDefaultAsync(u => u.CPF == dados.CPF);
 
@@ -58,7 +66,7 @@ namespace ApiCentralDocsWeb.Services
                 Nome = dados.Nome,
                 CPF = dados.CPF,
                 Email = dados.Email,
-                Senha = dados.Senha
+                Senha = CryptoService.EncryptPassword(dados.Senha)
             };
 
             _context.Usuarios.Add(usuario);
@@ -76,7 +84,11 @@ namespace ApiCentralDocsWeb.Services
 
             usuario.Nome = dados.Nome;
             usuario.Email = dados.Email;
-            usuario.Senha = dados.Senha;
+
+            if (!string.IsNullOrEmpty(dados.Senha))
+            {
+                usuario.Senha = CryptoService.EncryptPassword(dados.Senha); 
+            }
 
             await _context.SaveChangesAsync();
 
@@ -101,12 +113,20 @@ namespace ApiCentralDocsWeb.Services
             var usuario = await _context.Usuarios
                 .Include(u => u.Documentos)
                     .ThenInclude(d => d.TipoDocumento)
-                .FirstOrDefaultAsync(u => u.Email == dados.Email && u.Senha == dados.Senha);
+                .FirstOrDefaultAsync(u => u.Email == dados.Email);
 
             if (usuario == null)
             {
                 return new { Erro = true, Mensagem = "Email ou senha inválidos" };
             }
+
+            bool senhaValida = CryptoService.VerifyPassword(dados.Senha, usuario.Senha);
+
+            if (!senhaValida)
+            {
+                return new { Erro = true, Mensagem = "Email ou senha inválidos" };
+            }
+
             var token = _TokenService.GerarToken(usuario);
             return new
             {

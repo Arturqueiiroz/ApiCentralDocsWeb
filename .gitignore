@@ -368,14 +368,13 @@ FodyWeavers.xsd
 /Migrations/20260319165349_InitialCreate.cs
 /Migrations/AppDbContextModelSnapshot.cs
 /Migrations/20260319165349_InitialCreate.Designer.cs
+<<<<<<< HEAD
 /appsettings.Development.json
-/.gitignore
-/.gitignore
-/appsettings.Development.json
-/.gitignore
-/.gitignore
-/appsettings.Development.json
-/appsettings.Development.json
-/Migrations/20260327171818_Initial.cs
-/Migrations/20260327171818_Initial.Designer.cs
-/ApiCentralDocsWeb.csproj
+/Migrations/20260319192121_Initial.cs
+/Migrations/20260319192121_Initial.Designer.cs
+=======
+/Migrations/20260324180817_AddFoto.cs
+>>>>>>> 52c06bb5ae3bcb7396ca220c5a6a891246d98f04
+/Migrations/20260324180817_AddFoto.Designer.cs
+/Migrations/20260324193203_addFoto.cs
+/Migrations/20260324193203_addFoto.Designer.cs
