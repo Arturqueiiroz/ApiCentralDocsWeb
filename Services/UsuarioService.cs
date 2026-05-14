@@ -55,11 +55,19 @@ namespace ApiCentralDocsWeb.Services
                 };
             }
             var usuarioExistente = await _context.Usuarios
-                .FirstOrDefaultAsync(u => u.CPF == dados.CPF);
+                .FirstOrDefaultAsync(usuario => usuario.CPF == dados.CPF || usuario.Email == dados.Email);
 
             if (usuarioExistente != null)
             {
-                return new { Erro = true, Mensagem = "CPF já cadastrado" };
+                if (usuarioExistente.CPF == dados.CPF)
+                {
+                    return new { Erro = true, Mensagem = "CPF já cadastrado" };
+                }
+
+                if (usuarioExistente.Email == dados.Email)
+                {
+                    return new { Erro = true, Mensagem = "E-mail já cadastrado" };
+                }
             }
 
             var usuario = new Usuario
