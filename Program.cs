@@ -14,20 +14,13 @@ namespace ApiCentralDocsWeb
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Porta usada pelo Railway
-            var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
-            builder.WebHost.UseUrls($"http://0.0.0.0:{port}");
-
-            // Services
             builder.Services.AddScoped<UsuarioService>();
             builder.Services.AddScoped<FotoService>();
             builder.Services.AddScoped<ITokenService, TokenService>();
 
-            // Banco PostgreSQL
             builder.Services.AddDbContext<AppDbContext>(options =>
-                options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-            // JWT
             builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(option =>
                 {
@@ -47,7 +40,6 @@ namespace ApiCentralDocsWeb
                 });
 
             builder.Services.AddControllers();
-
             builder.Services.AddOpenApi();
 
             builder.Services.AddCors(options =>
@@ -62,13 +54,6 @@ namespace ApiCentralDocsWeb
 
             var app = builder.Build();
 
-            // Aplica as migrations automaticamente ao iniciar a API
-            using (var scope = app.Services.CreateScope())
-            {
-                var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-                context.Database.Migrate();
-            }
-
             app.UseCors("PermitirTudo");
 
             if (app.Environment.IsDevelopment())
@@ -76,6 +61,8 @@ namespace ApiCentralDocsWeb
                 app.MapOpenApi();
                 app.MapScalarApiReference();
             }
+
+            app.UseHttpsRedirection();
 
             app.UseAuthentication();
             app.UseAuthorization();

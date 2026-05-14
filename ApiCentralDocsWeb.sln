@@ -5,8 +5,6 @@ VisualStudioVersion = 17.14.36717.8
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApiCentralDocsWeb", "ApiCentralDocsWeb.csproj", "{ED25CFEA-1F04-4778-8D02-F9040D9B278B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CentralDocsTest", "CentralDocsTest\CentralDocsTest.csproj", "{13B8D8D1-171D-2F5A-EC69-3B83C60E1F2B}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -17,10 +15,6 @@ Global
 		{ED25CFEA-1F04-4778-8D02-F9040D9B278B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ED25CFEA-1F04-4778-8D02-F9040D9B278B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ED25CFEA-1F04-4778-8D02-F9040D9B278B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{13B8D8D1-171D-2F5A-EC69-3B83C60E1F2B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{13B8D8D1-171D-2F5A-EC69-3B83C60E1F2B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{13B8D8D1-171D-2F5A-EC69-3B83C60E1F2B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{13B8D8D1-171D-2F5A-EC69-3B83C60E1F2B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
