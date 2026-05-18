@@ -93,7 +93,7 @@ namespace ApiCentralDocsWeb
             app.UseAuthorization();
 
             app.MapControllers();
-
+            app.MapGet("/", () => "API CentralDocs está online!");
             app.Run();
         }
     }
