@@ -14,12 +14,33 @@ namespace ApiCentralDocsWeb
         {
             var builder = WebApplication.CreateBuilder(args);
 
+            var port = Environment.GetEnvironmentVariable("PORT");
+
+            if (!string.IsNullOrEmpty(port))
+            {
+                builder.WebHost.UseUrls($"http://0.0.0.0:{port}");
+            }
+
             builder.Services.AddScoped<UsuarioService>();
             builder.Services.AddScoped<FotoService>();
             builder.Services.AddScoped<ITokenService, TokenService>();
 
+            var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+
+            if (string.IsNullOrWhiteSpace(connectionString))
+            {
+                var pgHost = Environment.GetEnvironmentVariable("PGHOST");
+                var pgPort = Environment.GetEnvironmentVariable("PGPORT") ?? "5432";
+                var pgDatabase = Environment.GetEnvironmentVariable("PGDATABASE");
+                var pgUser = Environment.GetEnvironmentVariable("PGUSER");
+                var pgPassword = Environment.GetEnvironmentVariable("PGPASSWORD");
+
+                connectionString =
+                    $"Host={pgHost};Port={pgPort};Database={pgDatabase};Username={pgUser};Password={pgPassword};SSL Mode=Require;Trust Server Certificate=true";
+            }
+
             builder.Services.AddDbContext<AppDbContext>(options =>
-                options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+                options.UseNpgsql(connectionString));
 
             builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(option =>
@@ -61,8 +82,6 @@ namespace ApiCentralDocsWeb
                 app.MapOpenApi();
                 app.MapScalarApiReference();
             }
-
-            app.UseHttpsRedirection();
 
             app.UseAuthentication();
             app.UseAuthorization();
