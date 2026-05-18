@@ -83,11 +83,8 @@ namespace ApiCentralDocsWeb
 
             app.UseCors("PermitirTudo");
 
-            if (app.Environment.IsDevelopment())
-            {
-                app.MapOpenApi();
-                app.MapScalarApiReference();
-            }
+            app.MapOpenApi();
+            app.MapScalarApiReference();
 
             app.UseAuthentication();
             app.UseAuthorization();
