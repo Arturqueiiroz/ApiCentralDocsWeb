@@ -4,7 +4,7 @@ using ApiCentralDocsWeb.Data;
 using ApiCentralDocsWeb.Model;
 using ApiCentralDocsWeb.Model.DTO;
 using Microsoft.AspNetCore.Authorization;
-
+using System.Security.Claims;
 
 namespace ApiCentralDocsWeb.Controllers
 {
@@ -20,12 +20,34 @@ namespace ApiCentralDocsWeb.Controllers
             _context = context;
         }
 
+        private int? ObterUsuarioIdLogado()
+        {
+            var idClaim =
+                User.FindFirst(ClaimTypes.NameIdentifier)?.Value ??
+                User.FindFirst("id")?.Value ??
+                User.FindFirst("Id")?.Value ??
+                User.FindFirst("sub")?.Value;
+
+            if (int.TryParse(idClaim, out int usuarioId))
+            {
+                return usuarioId;
+            }
+
+            return null;
+        }
+
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
+            var usuarioId = ObterUsuarioIdLogado();
+
+            if (usuarioId == null)
+                return Unauthorized("Usuário não identificado no token.");
+
             var documentos = await _context.Documentos
                 .Include(d => d.Usuario)
                 .Include(d => d.TipoDocumento)
+                .Where(d => d.UsuarioId == usuarioId)
                 .ToListAsync();
 
             var resultado = documentos.Select(d => new DocumentoDTO
@@ -44,10 +66,15 @@ namespace ApiCentralDocsWeb.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
+            var usuarioId = ObterUsuarioIdLogado();
+
+            if (usuarioId == null)
+                return Unauthorized("Usuário não identificado no token.");
+
             var documento = await _context.Documentos
                 .Include(d => d.Usuario)
                 .Include(d => d.TipoDocumento)
-                .FirstOrDefaultAsync(d => d.Id == id);
+                .FirstOrDefaultAsync(d => d.Id == id && d.UsuarioId == usuarioId);
 
             if (documento == null)
                 return NotFound("Documento não encontrado");
@@ -71,11 +98,18 @@ namespace ApiCentralDocsWeb.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var usuario = await _context.Usuarios.FindAsync(dados.UsuarioId);
+            var usuarioId = ObterUsuarioIdLogado();
+
+            if (usuarioId == null)
+                return Unauthorized("Usuário não identificado no token.");
+
+            var usuario = await _context.Usuarios.FindAsync(usuarioId);
+
             if (usuario == null)
                 return BadRequest("Usuário não encontrado");
 
             var tipo = await _context.TiposDocumento.FindAsync(dados.TipoDocumentoId);
+
             if (tipo == null)
                 return BadRequest("Tipo de documento não encontrado");
 
@@ -85,7 +119,10 @@ namespace ApiCentralDocsWeb.Controllers
                 OrgaoEmissor = dados.OrgaoEmissor,
                 DataEmissao = dados.DataEmissao,
                 CidadeEmissao = dados.CidadeEmissao,
-                UsuarioId = dados.UsuarioId,
+
+                // Agora o usuário vem do token, não do front-end
+                UsuarioId = usuarioId.Value,
+
                 TipoDocumentoId = dados.TipoDocumentoId
             };
 
@@ -108,7 +145,13 @@ namespace ApiCentralDocsWeb.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            var documento = await _context.Documentos.FindAsync(id);
+            var usuarioId = ObterUsuarioIdLogado();
+
+            if (usuarioId == null)
+                return Unauthorized("Usuário não identificado no token.");
+
+            var documento = await _context.Documentos
+                .FirstOrDefaultAsync(d => d.Id == id && d.UsuarioId == usuarioId);
 
             if (documento == null)
                 return NotFound("Documento não encontrado");
